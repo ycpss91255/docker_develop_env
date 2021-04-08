@@ -7,6 +7,11 @@ ARG GROUP=initial
 ARG UID=1000
 ARG GID=${UID}
 ARG SHELL=/bin/bash
+
+# Env vars for the nvidia-container-runtime.
+ENV NVIDIA_VISIBLE_DEVICES all
+ENV NVIDIA_DRIVER_CAPABILITIES graphics,utility,compute
+
 # Setup users and groups
 RUN groupadd --gid ${GID} ${GROUP} \
   && useradd --gid ${GID} --uid ${UID} -ms ${SHELL} ${USER} \
