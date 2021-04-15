@@ -24,4 +24,4 @@ docker build -t ${user}/${DOCKER_IMAGE_NAME} \
     --build-arg GID=${gid} \
     ${file_dir}
 
-# --progress=plain
+    # --progress=plain \

@@ -29,6 +29,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       byobu zsh terminator \
       nano vim \
       python3-pip python3-catkin-tools python3-setuptools \
+      python3-tk \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
@@ -63,7 +64,7 @@ EXPOSE 22
 WORKDIR /home/${USER}/work
 
 # ENTRYPOINT ["/entrypoint.bash","byobu"]
-# ENTRYPOINT ["byobu"]
+ENTRYPOINT ["byobu"]
 # ENTRYPOINT ["bash"]
-ENTRYPOINT ["terminator"]
+# ENTRYPOINT ["terminator"]
 # ENTRYPOINT ["zsh"]
