@@ -1,5 +1,5 @@
 # syntax = docker/dockerfile:experimental
-FROM osrf/ros:noetic-desktop-full-focal
+FROM nvidia/cuda:11.1-devel-ubuntu20.04
 
 # Arguments
 ARG USER=initial
@@ -24,13 +24,29 @@ RUN groupadd --gid ${GID} ${GROUP} \
 # Replace apt urls
 RUN sed -i 's@archive.ubuntu.com@ftp.tku.edu.tw/@g' /etc/apt/sources.list
 # Install packages
-RUN apt-get update && apt-get install -y --no-install-recommends \
-      sudo net-tools htop git rsync wget zip unzip \
+
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive \
+      apt-get install -y --no-install-recommends \
+      sudo htop git rsync wget curl \
       byobu zsh terminator \
       nano vim \
-      python3-pip python3-catkin-tools python3-setuptools \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/*
+      lsb-release \
+      python3-pip \
+      # python3-catkin-tools \
+      python3-setuptools
+
+RUN echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > \
+      /etc/apt/sources.list.d/ros-latest.list \
+      && apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' \
+      --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654 \
+      && curl -sSL \
+      'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xC1CF6E31E6BADE8868B172B4F42ED6FBAB17C654' \
+      | sudo apt-key add - \
+      && apt update && apt install -y --no-install-recommends ros-noetic-desktop-full \
+      && apt-get clean \
+      && rm -rf /var/lib/apt/lists/*
+
+ENV ROS_DISTRO noetic
 
 WORKDIR /home/${USER}/.tmp
 
