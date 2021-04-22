@@ -14,7 +14,7 @@ gid=`id -g`
 
 export DOCKER_BUILDKIT=1
 
-DOCKER_IMAGE_NAME=pytorch-ros
+DOCKER_IMAGE_NAME=ros-melodic
 
 # build docker images
 docker build -t ${user}/${DOCKER_IMAGE_NAME} \

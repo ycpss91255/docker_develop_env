@@ -1,5 +1,5 @@
 # syntax = docker/dockerfile:experimental
-FROM osrf/ros:noetic-desktop-full-focal
+FROM osrf/ros:melodic-desktop-full
 
 # Arguments
 ARG USER=initial
@@ -20,15 +20,15 @@ RUN groupadd --gid ${GID} ${GROUP} \
   && echo "${USER}:x:${UID}:" >> /etc/group \
   && echo "${USER} ALL=(ALL) NOPASSWD: ALL" > "/etc/sudoers.d/${USER}" \
   && chmod 0440 "/etc/sudoers.d/${USER}"
-
 # Replace apt urls
 RUN sed -i 's@archive.ubuntu.com@ftp.tku.edu.tw/@g' /etc/apt/sources.list
+
 # Install packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
       sudo net-tools htop git rsync wget zip unzip \
       byobu zsh terminator \
       nano vim \
-      python3-pip python3-catkin-tools python3-setuptools \
+      python-pip python-catkin-tools python-setuptools \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
@@ -44,9 +44,6 @@ RUN bash ./script/bash_setup.bash \
   # Dependent
   && bash ./script/pip_setup.bash \
   && rm -rf /home/${USER}/.tmp
-
-# setup terminator config
-RUN mkdir -p /home/${USER}/.config/terminator
 
 # RUN pigpiod
 WORKDIR /home/${USER}
