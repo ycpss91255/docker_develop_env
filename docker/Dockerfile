@@ -25,10 +25,12 @@ RUN sed -i 's@archive.ubuntu.com@ftp.tku.edu.tw/@g' /etc/apt/sources.list
 
 # Install packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
-      sudo net-tools htop git rsync wget zip unzip \
-      byobu zsh terminator \
-      nano vim \
-      python-pip python-catkin-tools python-setuptools \
+  sudo net-tools htop git rsync wget zip unzip \
+  byobu zsh \
+  nano vim \
+  terminator gnome-terminal libcanberra-gtk3-module \
+  dbus-x11 libglvnd0 libgl1 libglx0 libegl1 libxext6 libx11-6 \
+  python-pip python-catkin-tools python-setuptools \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 

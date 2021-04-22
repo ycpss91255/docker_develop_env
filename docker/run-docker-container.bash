@@ -9,7 +9,7 @@ GRAPHCARD_DEBUG=false
 DOCKER_IMAGE_NAME=ros-melodic
 DOCKER_CONTAINER_NAME=ros-melodic
 
-WORKSPACE_PATH=$HOME/workspace/pytorch_ws
+WORKSPACE_PATH=$HOME/workspace/docker_develop_env
 
 IntelDockerRun(){
   docker run --rm \
