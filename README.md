@@ -28,3 +28,11 @@ $ ./run-docker-container.bash
 - bash
 - byobu (default zsh)
 - zsh (powerlevel10k)
+
+# Start
+
+- cd to rule, and run create_rule.sh
+  ```shell
+  $ cd <rule path>
+  $ ./create_rule.sh
+  ```
