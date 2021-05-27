@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sudo cp ./zed/* /usr/lib/x86_64-linux-gnu/

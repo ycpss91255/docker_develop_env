@@ -1,5 +1,5 @@
 # syntax = docker/dockerfile:experimental
-FROM osrf/ros:melodic-desktop-full
+FROM stereolabs/zed:3.4-ros-devel-cuda10.2-ubuntu18.04
 
 # Arguments
 ARG USER=initial
@@ -30,9 +30,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   nano vim \
   terminator gnome-terminal libcanberra-gtk3-module \
   dbus-x11 libglvnd0 libgl1 libglx0 libegl1 libxext6 libx11-6 \
-  python-pip python-catkin-tools python-setuptools \
+  python-pip python-setuptools \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
+
+RUN chown -R ${USER}:${GROUP} /usr/local/zed
 
 WORKDIR /home/${USER}/.tmp
 
@@ -44,8 +46,9 @@ RUN bash ./script/bash_setup.bash \
   && bash ./script/zsh_setup.bash \
   && bash ./script/byobu_setup.bash \
   # Dependent
-  && bash ./script/pip_setup.bash \
-  && rm -rf /home/${USER}/.tmp
+  && bash ./script/zed_setup.bssh \
+  # && bash ./script/pip_setup.bash \
+  && sudo rm -rf /home/${USER}/.tmp
 
 # RUN pigpiod
 WORKDIR /home/${USER}

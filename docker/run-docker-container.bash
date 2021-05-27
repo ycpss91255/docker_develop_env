@@ -2,14 +2,14 @@
 
 source $(pwd)/get_graph_card.bash
 # start sharing xhost
-xhost +local:root
+# xhost +local:root
 
 GRAPHCARD_DEBUG=false
 
-DOCKER_IMAGE_NAME=ros-melodic
-DOCKER_CONTAINER_NAME=ros-melodic
+DOCKER_IMAGE_NAME=zed-ros-melodic
+DOCKER_CONTAINER_NAME=zed-ros-melodic
 
-WORKSPACE_PATH=$HOME/workspace/docker_develop_env
+WORKSPACE_PATH=$HOME/workspace/cyc/zed_ws
 
 IntelDockerRun(){
   docker run --rm \

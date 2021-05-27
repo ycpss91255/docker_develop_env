@@ -14,7 +14,7 @@ gid=`id -g`
 
 export DOCKER_BUILDKIT=1
 
-DOCKER_IMAGE_NAME=ros-melodic
+DOCKER_IMAGE_NAME=zed-ros-melodic
 
 # build docker images
 docker build -t ${user}/${DOCKER_IMAGE_NAME} \
