@@ -1,0 +1,87 @@
+# syntax = docker/dockerfile:experimental
+FROM ubuntu:20.04
+
+# Arguments
+ARG USER=initial
+ARG GROUP=initial
+ARG UID=1000
+ARG GID=${UID}
+ARG SHELL=/bin/bash
+
+# Env vars for the nvidia-container-runtime.
+ENV NVIDIA_VISIBLE_DEVICES all
+ENV NVIDIA_DRIVER_CAPABILITIES all
+# ENV NVIDIA_DRIVER_CAPABILITIES graphics,utility,compute
+
+# Setup users and groups
+RUN groupadd --gid ${GID} ${GROUP} \
+    && useradd --gid ${GID} --uid ${UID} -ms ${SHELL} ${USER} \
+    && mkdir -p /etc/sudoers.d \
+    && echo "${USER}:x:${UID}:${UID}:${USER},,,:$HOME:${shell}" >> /etc/passwd \
+    && echo "${USER}:x:${UID}:" >> /etc/group \
+    && echo "${USER} ALL=(ALL) NOPASSWD: ALL" > "/etc/sudoers.d/${USER}" \
+    && chmod 0440 "/etc/sudoers.d/${USER}"
+
+# Replace apt urls
+# Change to Taiwan
+# RUN sed -i 's@archive.ubuntu.com@tw.archive.ubuntu.com@g' /etc/apt/sources.list
+# Change to tku
+RUN sed -i 's@archive.ubuntu.com@ftp.tku.edu.tw@g' /etc/apt/sources.list
+
+ENV TZ=America/New_York
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# Install packages
+RUN apt update && apt-get install -y --no-install-recommends \
+    sudo git htop wget curl psmisc \
+    # Shell
+    byobu zsh terminator \
+    # Editing tools
+    nano vim \
+    gnome-terminal libcanberra-gtk-module libcanberra-gtk3-module \
+    # Work tools
+    libopencv-dev cmake make g++ \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# dbus-x11 libglvnd0 libgl1 libglx0 libegl1 libxext6 libx11-6 \
+
+WORKDIR /home/${USER}/.tmp
+
+# Copy custom configuration
+COPY config .
+
+# ROS Arguments
+# Is the computer master or slave in ROS
+ARG ROS_TYPE=MASTER
+# ARG ROS_MASTER_IP=10.42.0.1
+# ARG ROS_SLAVE_IP=10.42.0.2
+
+ARG ROS_MASTER_IP=10.42.0.1
+ARG ROS_SLAVE_IP=10.42.0.2
+
+RUN bash ./script/shell_setup.sh \
+    && bash ./script/editor_setup.sh \
+    # Dependent
+    && rm -rf /home/${USER}/.tmp
+
+# Copy entrypoint
+COPY ./entrypoint.sh /entrypoint.sh
+RUN chmod 777 /entrypoint.sh
+
+WORKDIR /home/${USER}
+
+# Switch user to ${USER}
+USER ${USER}
+RUN sudo mkdir work
+
+# Make SSH available
+EXPOSE 22
+
+# Switch to user's HOME folder
+WORKDIR /home/${USER}/work
+
+# ENTRYPOINT ["terminator"]
+# ENTRYPOINT ["zsh"]
+# ENTRYPOINT ["bash"]
+ENTRYPOINT ["/entrypoint.sh","byobu"]
