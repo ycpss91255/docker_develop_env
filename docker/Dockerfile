@@ -1,5 +1,5 @@
 # syntax = docker/dockerfile:experimental
-FROM nvidia/cuda:11.1-devel-ubuntu20.04
+FROM nvidia/cuda:11.1.1-devel-ubuntu20.04
 
 # Arguments
 ARG USER=initial
