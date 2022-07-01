@@ -1,5 +1,5 @@
 # syntax = docker/dockerfile:experimental
-FROM osrf/ros:melodic-desktop-full
+FROM osrf/ros:noetic-desktop-full
 
 ############################## SYSTEM PARAMETERS ##############################
 ## Base arguments
@@ -42,7 +42,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   gnome-terminal libcanberra-gtk-module libcanberra-gtk3-module \
   # Work tools
   python3-pip python3-dev python3-setuptools \
-  python-pip python-catkin-tools python-setuptools \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 

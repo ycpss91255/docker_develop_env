@@ -1,5 +1,5 @@
 # syntax = docker/dockerfile:experimental
-FROM osrf/ros:melodic-desktop-full
+FROM nvidia/cuda:11.1.1-devel-ubuntu20.04
 
 ############################## SYSTEM PARAMETERS ##############################
 ## Base arguments
@@ -29,10 +29,15 @@ RUN groupadd --gid ${GID} ${GROUP} \
 # TKU
 RUN sed -i 's@archive.ubuntu.com@ftp.tku.edu.tw/@g' /etc/apt/sources.list
 
+ENV TZ=America/New_York
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 ############################### INSTALL & SETUP ###############################
 ## Install packages
+
+RUN apt-key adv --fetch-keys
 RUN apt-get update && apt-get install -y --no-install-recommends \
-  sudo htop git wget curl \
+  sudo htop git wget curl lsb-core \
   # Shell
   byobu zsh \
   terminator \
@@ -42,9 +47,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   gnome-terminal libcanberra-gtk-module libcanberra-gtk3-module \
   # Work tools
   python3-pip python3-dev python3-setuptools \
-  python-pip python-catkin-tools python-setuptools \
   && apt-get clean \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists
+
+RUN echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > \
+  /etc/apt/sources.list.d/ros-latest.list \
+  && curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add - \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends ros-noetic-desktop-full \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists
+
+ARG ROS_DISTRO noetic
 
 WORKDIR /home/${USER}/.tmp
 
