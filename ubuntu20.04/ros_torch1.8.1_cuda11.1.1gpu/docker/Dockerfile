@@ -29,6 +29,7 @@ RUN groupadd --gid ${GID} ${GROUP} \
 # TKU
 RUN sed -i 's@archive.ubuntu.com@ftp.tku.edu.tw/@g' /etc/apt/sources.list
 
+## Timezone (ROS)
 ENV TZ=America/New_York
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
@@ -50,6 +51,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists
 
+## Install ros and ROS_DISTRO
 RUN echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > \
   /etc/apt/sources.list.d/ros-latest.list \
   && curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add - \
@@ -58,7 +60,7 @@ RUN echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists
 
-ARG ROS_DISTRO noetic
+ENV ROS_DISTRO noetic
 
 WORKDIR /home/${USER}/.tmp
 

@@ -19,7 +19,6 @@ container_name=${workspace_name}
 # xhost +local:root
 
 ################################# FUNCTIONS #################################
-
 ################################
 # Get the GraphicsCard label
 # Arguments:
