@@ -64,11 +64,7 @@ ARG ROS_SLAVE_IP=10.42.0.2
 ARG BYOBU_SHELL=zsh
 
 ## Set User configuration
-RUN bash ./script/shell_setup.sh \
-  && bash ./script/editor_setup.sh \
-  # Dependent
-  && bash ./script/pip_setup.sh \
-  && bash ./script/ros_setup.sh \
+RUN bash ./run_setup_script.sh \
   && rm -rf /home/${USER}/.tmp
 
 ## Copy entrypoint
