@@ -1,0 +1,4 @@
+# catkin build Dependent
+osrf-pycommon==0.1.9
+jupyter
+ipyparallel
