@@ -55,7 +55,7 @@ docker_run() {
     docker run --rm \
         --net=bridge \
         --ipc=host \
-        -p 9999:8888 \
+        -p 10000:10000 \
         $1 \
         --privileged \
         -v /tmp/.X11-unix:/tmp/.X11-unix:rw \

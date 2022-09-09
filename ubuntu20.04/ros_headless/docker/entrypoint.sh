@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-jupyter notebook --allow-root --no-browser --ip="*"
+jupyter lab --no-browser --ip="*" --port 10000
 
 exec $@
