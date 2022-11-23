@@ -10,13 +10,14 @@ group=$(id -gn)
 uid=$(id -u)
 gid=$(id -g)
 
-# Get WorkSpace parameters
-workspace=$(readlink -f "$0")
+# Get WorkSpace name
+workspace=$(dirname $(readlink -f "$0"))
+# workspace=$(driname "$0")
+# workspace=$(readlink -f "$0")
 workspace=${workspace%_ws*}
-workspace_name=${workspace##*/}
 
-# Docker image name
-image_name=${workspace_name}
+# Docker image name is workspace name
+image_name=${workspace##*/}
 
 # Enable docker build kit function
 export DOCKER_BUILDKIT=1

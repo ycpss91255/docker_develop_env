@@ -4,21 +4,22 @@
 # Get script path
 file_dir="$(dirname $0)"
 
-# Get WorkSpace parameters
-workspace=$(readlink -f "${0}")
+# Get WorkSpace name
+workspace=$(dirname $(readlink -f "$0"))
+# workspace=$(driname "$0")
+# workspace=$(readlink -f "$0")
 workspace=${workspace%_ws*}
-workspace_name=${workspace##*/}
-workspace_path=${workspace}"_ws"
 
-# Docker image and container name
-image_name=${workspace_name}
-container_name=${workspace_name}
+# Docker image and container name is workspace name
+image_name=${workspace##*/}
+container_name=${image_name}
 
 # Start sharing xhost
 # You can also comment it, if you report an error
 # xhost +local:root
 
 ################################# FUNCTIONS #################################
+
 ################################
 # Get the GraphicsCard label
 # Arguments:
@@ -51,11 +52,10 @@ function get_graph_card() {
 # Arguments:
 # - $1 (String) - GPU paramters
 ################################
-docker_run() {
+function docker_run() {
     docker run --rm \
-        --net=bridge \
+        --net=host \
         --ipc=host \
-        -p 10000:10000 \
         $1 \
         --privileged \
         -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
